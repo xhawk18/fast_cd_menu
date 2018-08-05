@@ -757,6 +757,17 @@ if [ "${BASH-no}" != "no" ]; then
 fi
 EOT
     fi
+
+    cat << EOT
+Super command "c" for cd menu was successfully installed.
+
+Command "c" will be enabled automatically in next login with bash.
+For this session, please run
+    =============================================
+      source "\$HOME/.fast_cd/fast_cd_menu.sh"
+    =============================================
+to enable command "c" manually.
+EOT
 }
 
 install
