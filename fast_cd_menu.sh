@@ -632,7 +632,7 @@ function _cd_get_parent() {
         local v="$(_cd_get_parent "$*")"
         local pwd="${PWD//\/}"
         local max=$((${#PWD} - ${#pwd}))
-        cd "$(
+        _cd_save "$(
             local i
             for ((i = 0; i < v && i < max; ++i)); do
                 echo -n "../"
