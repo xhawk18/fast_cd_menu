@@ -17,7 +17,7 @@ or wget
 wget -qO- https://raw.githubusercontent.com/xhawk18/fast_cd_menu/master/install.sh | bash
 ```
 
-The script installs fast_cd_menu in ~/.fast_cd and adds the source line to your profile (~/.bash_profile, ~/.profile, or ~/.bashrc).
+The script installs fast_cd_menu in \~/.fast_cd and adds the source line to your profile (\~/.bash_profile, \~/.profile, or \~/.bashrc).
 
 ```bash
 source "$HOME/.fast_cd/fast_cd_menu.sh"
