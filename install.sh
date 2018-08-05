@@ -761,12 +761,15 @@ EOT
     cat << EOT
 Super command "c" for cd menu was successfully installed.
 
-Command "c" will be enabled automatically in next login with bash.
+Command "c" will be enabled automatically after bash console re-opened.
 For this session, please run
     =============================================
       source "\$HOME/.fast_cd/fast_cd_menu.sh"
     =============================================
 to enable command "c" manually.
+
+If you would like to make a donation, please send ETH to
+    0x11111111d4C935256e00A7468df5aA90e2e161Ea
 EOT
 }
 
