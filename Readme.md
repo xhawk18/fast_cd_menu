@@ -25,7 +25,7 @@ source "$HOME/.fast_cd/fast_cd_menu.sh"
 
 ## Usage
 
-After installed, **re-open** the bash console and **cd** to some folders firstly, and then you can try the supoert command **c**. For example --
+After installed, **re-open** the bash console and **cd** to some folders firstly, and then you can try the super command **c**. For example --
 
 * show a menu of cd history
 
