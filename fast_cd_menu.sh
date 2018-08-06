@@ -392,6 +392,7 @@ function _cd_list() {
             trap "" SIGALRM
 
             # show menu
+            echo -ne "\xe\xf"
             echo -ne "\033[?25l"
             stty raw -echo min 0
             local changed=0
@@ -626,7 +627,6 @@ function _cd_get_parent() {
 
     if [[ "$*" == "-" ]]; then _cd_save "-"
     elif [[ "$*" == "" ]]; then
-        echo -ne "\xe\xf"
         _cd_list "$(_cd_show_list_all "$(if [[ -f "$HOME/.fast_cd/cd_save" ]]; then cat "$HOME/.fast_cd/cd_save"; fi)" )" "show_all"
     elif (( "$(_cd_get_parent "$*")" > 0 )); then
         local v="$(_cd_get_parent "$*")"

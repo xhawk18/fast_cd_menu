@@ -6,6 +6,8 @@
 
 ## Installation
 
+(Bash 3.0 or higher is required)
+
 To install or update fast_cd_menu, you can use the install script with curl
 
 ```bash
