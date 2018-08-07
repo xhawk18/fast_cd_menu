@@ -1,3 +1,13 @@
+# Fast cd menu
+
+<!-- TOC -->
+
+- [What's this?](#whats-this)
+- [Installation](#installation)
+- [Usage](#usage)
+
+<!-- /TOC -->
+
 ## What's this?
 
 "fast_cd_menu" is a bash script to support command "c" in bash to show cd history as menu.
