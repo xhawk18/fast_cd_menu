@@ -5,6 +5,7 @@ function cat_sh() {
 
 
 function c() {
+local _cd_on_left=1
 
 function _cd_get_cur_pos() {
     echo -ne "\033[6n" > /dev/tty
@@ -77,6 +78,10 @@ function _cd_show_colored_line() {
     local hl_pos="\$4"
     local hl_len="\$5"
     if [[ "\$highlight" == "Y" ]]; then
+        if ((_cd_on_left && \${#@} >= 6)); then
+            local num="\$6"
+            echo -ne "\033[7m\033[32m\$num\033[0m\033[7m:"
+        fi
         echo -ne "\033[7m"
         echo -n "\${dir}"
         echo -ne "\033[33m"
@@ -89,12 +94,16 @@ function _cd_show_colored_line() {
         else
             echo -n "\${file}"
         fi
-        if ((\${#@} >= 6)); then
+        if ((!_cd_on_left && \${#@} >= 6)); then
             local num="\$6"
             echo -ne "\033[0m\033[7m:\033[32m\$num"
         fi
         echo -ne "\033[0m"
     else
+        if ((_cd_on_left && \${#@} >= 6)); then
+            local num="\$6"
+            echo -ne "\033[1m\033[32m\$num\033[0m:"
+        fi
         echo -n "\${dir}"
         echo -ne "\033[1m\033[33m"
         if ((hl_pos >= 0)); then
@@ -106,7 +115,7 @@ function _cd_show_colored_line() {
         else
             echo -n "\${file}"
         fi
-        if ((\${#@} >= 6)); then
+        if ((!_cd_on_left && \${#@} >= 6)); then
             local num="\$6"
             echo -ne "\033[0m:\033[1m\033[32m\$num"
         fi
@@ -252,7 +261,9 @@ function _cd_show_dir_line() {
             hl_len="\$((\$hl_end - \$hl_pos))"
             _cd_show_colored_line "\$highlight" "\$dir" "\$short_file" "\$hl_pos" "\$hl_len"
         else
-            _cd_show_padding "\$highlight" "\$((\$width-\$len))"
+            if ((!_cd_on_left)); then
+                _cd_show_padding "\$highlight" "\$((\$width-\$len))"
+            fi
             _cd_show_colored_line "\$highlight" "\$dir" "\$file" "\$hl_pos" "\$hl_len"
         fi
     else
@@ -287,7 +298,9 @@ function _cd_show_dir_line() {
             hl_len="\$((\$hl_end - \$hl_pos))"
             _cd_show_colored_line "\$highlight" "\$dir" "\$short_file" "\$hl_pos" "\$hl_len" "\$num"
         else
-            _cd_show_padding "\$highlight" "\$((\$width-\$len))"
+            if ((!_cd_on_left)); then
+                _cd_show_padding "\$highlight" "\$((\$width-\$len))"
+            fi
             _cd_show_colored_line "\$highlight" "\$dir" "\$file" "\$hl_pos" "\$hl_len" "\$num"
         fi
     fi
@@ -297,8 +310,8 @@ function _cd_show_dir_line() {
 function _cd_show_pwd() {
     local file="\${PWD##*/}"
     local dir="\${PWD:0:\${#PWD}-\${#file}}"
-    echo -n "=> "
-    _cd_show_colored_line N "\$dir" "\$file" -1
+    echo -en "\r=>"
+    _cd_show_colored_line Y "\$dir" "\$file" -1
     echo ""
 }
 
