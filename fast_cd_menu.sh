@@ -592,6 +592,7 @@ function _cd_list() {
                     changed=1
                     break
                 elif (( cd_entry != -1 )); then
+                    echo -e '\r';
                     break
                 fi
             done
