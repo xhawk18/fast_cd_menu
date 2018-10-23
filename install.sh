@@ -632,6 +632,7 @@ function _cd_list() {
 
             if [[ "\$changed" == "1" ]]; then
                 stty "\$oldstty"
+                echo -e "\033[\$((y+menu_h-1));1H"
                 _cd_show_pwd
             fi
         }
