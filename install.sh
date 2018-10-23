@@ -418,6 +418,7 @@ function _cd_list() {
             local height="\$LINES"
             local x="\${pos% *}"
             local y="\${pos#* }"
+            echo -ne "\033[\$y;1H    "
             local old_menu_off=0
             local menu_off=0
             local menu_h=\$((height<lines?height:lines))
