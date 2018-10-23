@@ -401,6 +401,7 @@ function _cd_list() {
             local height="$LINES"
             local x="${pos% *}"
             local y="${pos#* }"
+            local old_menu_off=0
             local menu_off=0
             local menu_h=$((height<lines?height:lines))
             local i
@@ -435,8 +436,10 @@ function _cd_list() {
                     done
                 }
             }
+            local old_highlight="-1"
             local highlight=0
             local cd_entry="-1"
+            local old_search=""
             local search=""
             local akey=(0 0 0)
             while :; do
@@ -462,18 +465,25 @@ function _cd_list() {
                         _cd_save "$dir"
                         changed=1
                         break
-                    else search=""; fi
+                    else
+                        old_search="$search"
+                        search=""
+                    fi
                     continue
                 fi
                 if [[ "$num" != "" ]]; then
                     if ((highlight < $num)); then
+                        old_highlight=$highlight
                         highlight="$num"
                         if (( menu_off + menu_h <= highlight )); then
+                            old_menu_off=$menu_off
                             menu_off=$((highlight - menu_h + 1))
                         fi
                     elif ((highlight > $num)); then
+                        old_highlight=$highlight
                         highlight="$num"
                         if (( menu_off > highlight )); then
+                            old_menu_off=$menu_off
                             menu_off=$highlight
                         fi
                     fi
@@ -498,10 +508,14 @@ function _cd_list() {
                     for ((num = 0; num < menu_h; ++num)); do
                         local line="${lines[$((num+menu_off))]}"
                         if (( num != 0 )); then echo; fi
-                        echo -ne "\033[$((y+num));1H"
                         if ((num+menu_off == highlight)); then
+                            echo -ne "\033[$((y+num));1H"
                             _cd_show_dir_line Y "$width" "$line" "$search"
-                        else
+                        elif ((num+menu_off == old_highlight)); then
+                            echo -ne "\033[$((y+num));1H"
+                            _cd_show_dir_line N "$width" "$line" "$search"
+                        elif ((old_highlight == -1 || menu_off != old_menu_off)) || [[ "$search" != "$old_search" ]]; then
+                            echo -ne "\033[$((y+num));1H"
                             _cd_show_dir_line N "$width" "$line" "$search"
                         fi
                     done
@@ -535,19 +549,25 @@ function _cd_list() {
                     IFS="$SAVE_IFS"
                     if [[ "${akey[0]}" == "$ESC" && "${akey[1]}" == "[" ]]; then
                         if [[ "${akey[2]}" == "B" ]]; then
+                            old_search="$search"
                             search=""
                             if (( highlight + 1 < lines )); then
+                                old_highlight=$highlight
                                 (( ++highlight ))
                                 if (( menu_off + menu_h <= highlight )); then
+                                    old_menu_off=$menu_off
                                     menu_off=$((highlight - menu_h + 1))
                                 fi
                                 break
                             fi
                         elif [[ "${akey[2]}" == "A" ]]; then
+                            old_search="$search"
                             search=""
                             if (( highlight > 0 )); then
+                                old_highlight=$highlight
                                 ((--highlight))
                                 if (( menu_off > highlight )); then
+                                    old_menu_off=$menu_off
                                     menu_off=$highlight
                                 fi
                                 break
@@ -561,15 +581,24 @@ function _cd_list() {
                         fi
                     elif [[ "${akey[0]}" == "$ESC" ]]; then
                         if [[ "$search" == "" ]]; then cd_entry="-2"
-                        else search=""; fi
+                        else
+                            old_search="$search"
+                            search=""
+                        fi
                         break
                     elif [[ "${akey[0]}" == "$LF" ]]; then
                         cd_entry="$highlight"
                         break
                     elif [[ "${akey[0]}" == "$BS" ]]; then
-                        if ((${#search} > 0)); then search="${search:0:${#search}-1}"; break; fi
+                        if ((${#search} > 0)); then
+                            old_search="$search"
+                            search="${search:0:${#search}-1}"
+                            break
+                        fi
                     else
-                        search="$search${akey[0]}"; break
+                        old_search="$search"
+                        search="$search${akey[0]}"
+                        break
                     fi
                 done
                 if (( cd_entry >= 0 )); then
