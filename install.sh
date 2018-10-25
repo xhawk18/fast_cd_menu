@@ -635,6 +635,8 @@ function _cd_list() {
                 stty "\$oldstty"
                 echo -e "\033[\$((y+menu_h-1));1H"
                 _cd_show_pwd
+            else
+                echo -ne "\033[\$((y+menu_h));1H"
             fi
         }
 
