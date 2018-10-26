@@ -797,7 +797,9 @@ function install(){
     cat_sh > "$HOME/.fast_cd/fast_cd_menu.sh"
     chmod a+x "$HOME/.fast_cd/fast_cd_menu.sh"
 
-    if [[ -f "$HOME/.bash_profile" ]]; then
+    if [[ -f "$HOME/.bashrc" ]]; then
+        rewrite_line "$HOME/.bashrc" '.*source.*fast_cd_menu.sh".*' 'source "$HOME/.fast_cd/fast_cd_menu.sh"'
+    elif [[ -f "$HOME/.bash_profile" ]]; then
         rewrite_line "$HOME/.bash_profile" '.*source.*fast_cd_menu.sh".*' 'source "$HOME/.fast_cd/fast_cd_menu.sh"'
     elif [[ -f "$HOME/.profile" ]]; then
         rewrite_line "$HOME/.profile" '.*source.*fast_cd_menu.sh".*' 'source "$HOME/.fast_cd/fast_cd_menu.sh"'
