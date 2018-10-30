@@ -822,8 +822,6 @@ For this session, please run
     =============================================
 to enable command "c" manually.
 
-If you would like to make a donation, please send ETH to
-    0x11111111d4C935256e00A7468df5aA90e2e161Ea
 EOT
 }
 
