@@ -466,13 +466,6 @@ function _cd_list() {
                 IFS=" "
                 local nums=( \$(get_match_index "\$list" "\$search") )
                 IFS="\$SAVE_IFS"
-                if ((\${#nums[@]} == 1)); then
-                    local dir="\$(_cd_get_one_line \${nums[0]} "\$list")"
-                    dir="\${dir%:*}"
-                    _cd_save "\$dir"
-                    changed=1
-                    break
-                fi
                 local num=""
                 if ((\${#nums[@]} > 0)); then num="\${nums[0]}"
                 elif ((\${#nums[@]} == 0)) && [[ "\$search" != "" ]]; then
@@ -538,6 +531,13 @@ function _cd_list() {
                         fi
                     done
                 }
+                if ((\${#nums[@]} == 1)); then
+                    local dir="\$(_cd_get_one_line \${nums[0]} "\$list")"
+                    dir="\${dir%:*}"
+                    _cd_save "\$dir"
+                    changed=1
+                    break
+                fi
                 local ESC="\$(echo -ne "\033")"
                 local LF="\$(echo -ne "\n")"       
                 local BS="\$(echo -ne "\x7F")"

@@ -12,7 +12,7 @@
 
 "fast_cd_menu" is a bash script to support command "c" in bash to show cd history as menu.
 
-![screen snapshot](./screen0.png)
+![screen snapshot](./screen.gif)
 
 ## Installation
 
