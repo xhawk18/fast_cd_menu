@@ -25,6 +25,7 @@ curl -o- https://raw.githubusercontent.com/xhawk18/fast_cd_menu/master/install.s
 ```
 
 or wget
+
 ```bash
 wget -qO- https://raw.githubusercontent.com/xhawk18/fast_cd_menu/master/install.sh | bash
 ```
@@ -33,6 +34,20 @@ The script installs fast_cd_menu in \~/.fast_cd and adds the source line to your
 
 ```bash
 source "$HOME/.fast_cd/fast_cd_menu.sh"
+```
+
+## Uninstall
+
+To uninstall, run
+
+```bash
+curl -o- https://raw.githubusercontent.com/xhawk18/fast_cd_menu/master/install.sh | bash -s -- --uninstall
+```
+
+or
+
+```bash
+wget -qO- https://raw.githubusercontent.com/xhawk18/fast_cd_menu/master/install.sh | bash -s -- --uninstall
 ```
 
 ## Usage

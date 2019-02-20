@@ -825,4 +825,36 @@ to enable command "c" manually.
 EOT
 }
 
-install
+uninstall_line(){
+    local file="$1"
+    if grep '.*source.*fast_cd_menu.sh".*' "$file" 1>/dev/null 2>&1; then
+        echo "Remove fast_cd_menu settings in $file"
+        sed -i '/.*source.*fast_cd_menu.sh".*/d' "$file"        
+    fi
+}
+
+uninstall(){
+    local run="$(
+    uninstall_line "$HOME/.bashrc"
+    uninstall_line "$HOME/.bash_profile"
+    uninstall_line "$HOME/.profile"
+    if [[ -f "$HOME/.fast_cd/fast_cd_menu.sh" ]]; then
+        echo "Remove fast_cd_menu"
+        rm -f "$HOME/.fast_cd/fast_cd_menu.sh"
+    fi
+    )"
+
+    if [[ "$run" != "" ]]; then
+        echo "$run"
+        echo "fast_cd_menu is successfully uninstalled!"
+    else
+        echo "fast_cd_menu has not been installed!" 1>&2
+    fi
+}
+
+if [[ "$1" == "--uninstall" ]]; then
+    uninstall
+else
+    install
+fi
+
