@@ -678,7 +678,7 @@ function _cd_get_parent() {
 
     if [[ "\$*" == "-" ]]; then _cd_save "-"
     elif [[ "\$*" == "" ]]; then
-        _cd_list "\$(_cd_show_list_all "\$(if [[ -f "\$HOME/.fast_cd/cd_save" ]]; then cat "\$HOME/.fast_cd/cd_save"; fi)" )" "show_all"
+        _cd_list "\$(_cd_show_list_all "\$(if [[ -f "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}" ]]; then cat "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}"; fi)" )" "show_all"
     elif (( "\$(_cd_get_parent "\$*")" > 0 )); then
         local v="\$(_cd_get_parent "\$*")"
         local pwd="\${PWD//\/}"
@@ -690,7 +690,7 @@ function _cd_get_parent() {
             done; )"
         _cd_show_pwd
     else
-        _cd_list "\$(_cd_show_list "\$(if [[ -f "\$HOME/.fast_cd/cd_save" ]]; then cat "\$HOME/.fast_cd/cd_save"; fi)" "\$*" )" "not_show_all" "\$*"
+        _cd_list "\$(_cd_show_list "\$(if [[ -f "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}" ]]; then cat "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}"; fi)" "\$*" )" "not_show_all" "\$*"
     fi
 
 
@@ -717,7 +717,7 @@ unalias cd > /dev/null 2>&1
 function _cd_save() {
     cd "\$@"
     local pwd="\${PWD}"
-    local dirs="\$(if [[ -f "\$HOME/.fast_cd/cd_save" ]]; then cat "\$HOME/.fast_cd/cd_save"; fi)"
+    local dirs="\$(if [[ -f "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}" ]]; then cat "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}"; fi)"
     local str="\$( {
         echo "\$dirs" | { 
             local dirs=()
@@ -750,12 +750,12 @@ function _cd_save() {
         }
     } )"
     mkdir -p "\$HOME/.fast_cd"
-    echo "\$pwd" > "\$HOME/.fast_cd/cd_save_last"
-    echo "\$str" > "\$HOME/.fast_cd/cd_save"
+    echo "\$pwd" > "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}_last"
+    echo "\$str" > "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}"
 }
 
-if [[ false && -f "\$HOME/.fast_cd/cd_save_last" ]]; then
-    read < "\$HOME/.fast_cd/cd_save_last"
+if [[ false && -f "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}_last" ]]; then
+    read < "\$HOME/.fast_cd/cd_save_\${MSYSTEM:-}_last"
     if [[ -d "\$REPLY" ]]; then
         cd "\$REPLY"
     fi
@@ -857,4 +857,3 @@ if [[ "$1" == "--uninstall" ]]; then
 else
     install
 fi
-
